@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27018:27017"
+
+  gametracker-node:
+    image: "gametracker-node"
+    ports:
+      - "9000:9000"
+    env_file: ".env"
+    build: .
+    command: "yarn start"
+    volumes:
+      - "./dist:/usr/app/dist"
+
+  gametracker-node-local:
+    image: "gametracker-node-local"
+    ports:
+      - "9000:9000"
+    env_file: ".env"
+    build: .
+    volumes:
+      - "./src:/usr/app/src"
+    depends_on:
+      - "mongo"
+    command: "yarn dev"
